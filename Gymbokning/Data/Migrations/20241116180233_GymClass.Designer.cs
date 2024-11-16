@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Gymbokning.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241116172505_GymClass")]
+    [Migration("20241116180233_GymClass")]
     partial class GymClass
     {
         /// <inheritdoc />
@@ -102,7 +102,7 @@ namespace Gymbokning.Data.Migrations
 
                     b.HasIndex("GymClassId");
 
-                    b.ToTable("ApplicationUserGymClass");
+                    b.ToTable("ApplicationUserGymClasses");
                 });
 
             modelBuilder.Entity("Gymbokning.Models.GymClass", b =>

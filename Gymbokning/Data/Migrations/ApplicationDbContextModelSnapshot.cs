@@ -99,7 +99,7 @@ namespace Gymbokning.Data.Migrations
 
                     b.HasIndex("GymClassId");
 
-                    b.ToTable("ApplicationUserGymClass");
+                    b.ToTable("ApplicationUserGymClasses");
                 });
 
             modelBuilder.Entity("Gymbokning.Models.GymClass", b =>
