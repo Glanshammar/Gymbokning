@@ -1,6 +1,4 @@
-﻿using Gymbokning.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace Gymbokning.Data
 {
@@ -12,6 +10,7 @@ namespace Gymbokning.Data
         }
 
         public DbSet<GymClass> GymClasses { get; set; }
+        public DbSet<ApplicationUserGymClass> ApplicationUserGymClasses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

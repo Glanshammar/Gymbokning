@@ -1,8 +1,3 @@
-using Gymbokning.Data;
-using Gymbokning.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-
 namespace Gymbokning
 {
     public class Program
