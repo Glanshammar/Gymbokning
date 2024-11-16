@@ -4,19 +4,64 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using Gymbokning.Data;
-using Gymbokning.Models;
 
 namespace Gymbokning.Controllers
 {
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GymClassesController(ApplicationDbContext context)
+        public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+        }
+
+        public async Task<IActionResult> BookingToggle(int? id)
+        {
+            if (id == null)
+                return NotFound();
+
+            // Find the gym class by ID
+            var gymClass = await _context.GymClasses
+                .Include(gc => gc.AttendingMembers)
+                .ThenInclude(aug => aug.ApplicationUser)
+                .FirstOrDefaultAsync(gc => gc.Id == id);
+
+            if (gymClass == null)
+                return NotFound();
+
+            // Get the currently logged-in user
+            var currentUser = await _userManager.GetUserAsync(User);
+
+            if (currentUser == null)
+                return NotFound();
+
+            // Check if the user is already attending this gym class
+            var existingBooking = gymClass.AttendingMembers
+                .FirstOrDefault(aug => aug.ApplicationUserId == currentUser.Id);
+
+            if (existingBooking != null)
+            {
+                // User is already booked, so remove the booking
+                _context.ApplicationUserGymClasses.Remove(existingBooking);
+            }
+            else
+            {
+                // User is not booked, so add the booking
+                var newBooking = new ApplicationUserGymClass
+                {
+                    ApplicationUserId = currentUser.Id,
+                    GymClassId = gymClass.Id
+                };
+                await _context.ApplicationUserGymClasses.AddAsync(newBooking);
+            }
+
+            await _context.SaveChangesAsync();
+
+            // Redirect back to the index or details page as appropriate
+            return RedirectToAction(nameof(Index)); // or RedirectToAction(nameof(Details), new { id = gymClass.Id });
         }
 
         // GET: GymClasses
@@ -33,8 +78,12 @@ namespace Gymbokning.Controllers
                 return NotFound();
             }
 
+            // Retrieve the gym class, including attending members and their associated users
             var gymClass = await _context.GymClasses
+                .Include(gc => gc.AttendingMembers)
+                    .ThenInclude(aug => aug.ApplicationUser)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (gymClass == null)
             {
                 return NotFound();
@@ -58,6 +107,24 @@ namespace Gymbokning.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Convert Duration from string HH:mm to TimeSpan
+                if (TimeSpan.TryParse(gymClass.Duration.ToString(), out TimeSpan duration))
+                {
+                    gymClass.Duration = duration;
+                }
+                else
+                {
+                    ModelState.AddModelError("Duration", "Invalid duration format.");
+                    return View(gymClass);
+                }
+
+                // Check if Duration exceeds 24 hours
+                if (gymClass.Duration.TotalHours > 24)
+                {
+                    ModelState.AddModelError("Duration", "Duration must be less than or equal to 24 hours.");
+                    return View(gymClass);
+                }
+
                 _context.Add(gymClass);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
