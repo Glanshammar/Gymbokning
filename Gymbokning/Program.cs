@@ -2,7 +2,7 @@ namespace Gymbokning
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +13,7 @@ namespace Gymbokning
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
@@ -35,6 +36,7 @@ namespace Gymbokning
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -42,6 +44,8 @@ namespace Gymbokning
                 pattern: "{controller=GymClasses}/{action=Index}/{id?}");
             app.MapRazorPages();
 
+            await DbInitializer.Initialize(app.Services);
+            
             app.Run();
         }
     }
