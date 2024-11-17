@@ -14,12 +14,6 @@ public class DbInitializer
             await SeedUsers(userManager);
         }
     }
-    
-    public static async Task SeedData(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
-    {
-        await SeedRoles(roleManager);
-        await SeedUsers(userManager);
-    }
 
     private static async Task SeedRoles(RoleManager<IdentityRole> roleManager)
     {
