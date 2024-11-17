@@ -26,6 +26,14 @@ namespace Gymbokning.Areas.Identity.Pages.Account.Manage
             _signInManager = signInManager;
         }
 
+        [BindProperty]
+        public string FirstName { get; set; }
+
+        [BindProperty]
+        public string LastName { get; set; }
+
+        public string FullName => $"{FirstName} {LastName}";
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -67,6 +75,8 @@ namespace Gymbokning.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            FirstName = user.FirstName;
+            LastName = user.LastName;
 
             Input = new InputModel
             {
@@ -100,6 +110,9 @@ namespace Gymbokning.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            user.FirstName = FirstName;
+            user.LastName = LastName;
+
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -109,6 +122,13 @@ namespace Gymbokning.Areas.Identity.Pages.Account.Manage
                     StatusMessage = "Unexpected error when trying to set phone number.";
                     return RedirectToPage();
                 }
+            }
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            if (!updateResult.Succeeded)
+            {
+                StatusMessage = "Unexpected error when trying to update profile.";
+                return RedirectToPage();
             }
 
             await _signInManager.RefreshSignInAsync(user);
