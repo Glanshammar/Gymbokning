@@ -6,7 +6,7 @@
 
 <h1>Index</h1>
 
-@if (User.Identity?.IsAuthenticated == true)
+@if (User.IsInRole("Admin"))
 {
     <p>
         <a asp-action="Create">Create New</a>
@@ -50,7 +50,7 @@
             <td>
                 <a asp-action="BookingToggle" asp-route-id="@item.Id">Book</a>
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                @if (User.Identity?.IsAuthenticated == true)
+                @if (User.IsInRole("Admin"))
                 {
                     <span>|</span>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
