@@ -31,7 +31,10 @@ public class DbInitializer
             {
                 UserName = "admin@gymbokning.se",
                 Email = "admin@gymbokning.se",
-                EmailConfirmed = true
+                FirstName = "Admin",
+                LastName = "User",
+                EmailConfirmed = true,
+                TimeOfRegistration = DateTime.Now
             };
             var result = await userManager.CreateAsync(user, "Admin123!");
             if (result.Succeeded)
