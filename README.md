@@ -1,3 +1,3 @@
 # Admin Account
-Email: admin@gymbokning.se
-Password: Admin123!
+* Email: admin@gymbokning.se
+* Password: Admin123!
