@@ -6,4 +6,5 @@ global using Microsoft.AspNetCore.Mvc.Rendering;
 global using Microsoft.AspNetCore.Identity;
 global using Gymbokning.Data;
 global using Gymbokning.Models;
+global using Gymbokning.Models.ViewModels;
 global using Microsoft.EntityFrameworkCore;
