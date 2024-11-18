@@ -108,17 +108,17 @@ main {
 }
 
 .nav-pills .nav-link {
-  color: #ffffff; /* Change text color */
-  background-color: #1a1a1a; /* Background color for unselected links */
-  border-radius: 5px; /* Rounded corners */
+  color: #ffffff;
+  background-color: #1a1a1a;
+  border-radius: 5px;
 }
 
 .nav-pills .nav-link:hover {
-  background-color: #ff4500; /* Background color on hover */
-  color: #ffffff; /* Text color on hover */
+  background-color: #ff4500;
+  color: #ffffff;
 }
 
 .nav-pills .nav-link.active {
-  background-color: #ff4500; /* Background color for active link */
-  color: #ffffff; /* Text color for active link */
+  background-color: #ff4500;
+  color: #ffffff;
 }
