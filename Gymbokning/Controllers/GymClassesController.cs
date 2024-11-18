@@ -15,6 +15,41 @@ namespace Gymbokning.Controllers
         }
 
         [Authorize]
+        public async Task<IActionResult> BookedClasses()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var bookedClasses = await _context.GymClasses
+                .Include(gc => gc.AttendingMembers)
+                .Where(gc => gc.AttendingMembers.Any(am => am.ApplicationUserId == currentUser.Id))
+                .Where(gc => gc.StartTime > DateTime.Now)
+                .ToListAsync();
+
+            return View(bookedClasses);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ClassHistory()
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            var currentTime = DateTime.Now;
+
+            var pastClasses = await _context.GymClasses
+                .Include(gc => gc.AttendingMembers)
+                .Where(gc => gc.AttendingMembers.Any(am => am.ApplicationUserId == currentUser.Id))
+                .Where(gc => gc.StartTime < currentTime)
+                .OrderByDescending(gc => gc.StartTime)
+                .ToListAsync();
+            
+            ViewBag.CurrentTime = currentTime;
+            ViewBag.UserID = currentUser.Id;
+            ViewBag.TotalClasses = await _context.GymClasses.CountAsync();
+            ViewBag.UserClasses = await _context.GymClasses
+                .CountAsync(gc => gc.AttendingMembers.Any(am => am.ApplicationUserId == currentUser.Id));
+
+            return View(pastClasses);
+        }
+        
+        [Authorize]
         public async Task<IActionResult> BookingToggle(int? id)
         {
             if (id == null)
@@ -64,7 +99,14 @@ namespace Gymbokning.Controllers
         // GET: GymClasses
         public async Task<IActionResult> Index()
         {
-            return View(await _context.GymClasses.ToListAsync());
+            var currentUser = await _userManager.GetUserAsync(User);
+            var gymClasses = await _context.GymClasses
+                .Include(gc => gc.AttendingMembers)
+                .ToListAsync();
+
+            ViewData["CurrentUserId"] = currentUser?.Id;
+
+            return View(gymClasses);
         }
 
         // GET: GymClasses/Details/5
@@ -75,7 +117,6 @@ namespace Gymbokning.Controllers
                 return NotFound();
             }
 
-            // Retrieve the gym class, including attending members and their associated users
             var gymClass = await _context.GymClasses
                 .Include(gc => gc.AttendingMembers)
                     .ThenInclude(aug => aug.ApplicationUser)
