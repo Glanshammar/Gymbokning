@@ -1,5 +1,7 @@
 html {
   font-size: 14px;
+  position: relative;
+  min-height: 100%;
 }
 
 @media (min-width: 768px) {
@@ -8,15 +10,115 @@ html {
   }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+
+  /* Add wallpaper background */
+  background-image: url('https://images4.alphacoders.com/692/692043.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
-html {
+.content-wrapper {
+  flex: 1;
   position: relative;
-  min-height: 100%;
 }
 
-body {
+.footer {
+  position: relative;
+  z-index: 1;
+  background-color: #1a1a1a;
+}
+
+.footer .container {
+  color: #ffffff;
+  text-align: center;
+}
+
+header {
+  background-color: #1a1a1a;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #ffffff;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover,
+.navbar-dark .navbar-nav .nav-link:focus {
+  color: #ff4500;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  color: #ff4500 !important;
+}
+
+main {
   margin-bottom: 60px;
+}
+
+.content-box {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+  max-width: 1200px;
+}
+
+.table {
+  background-color: rgba(255,255,255,0.9);
+}
+
+.content-box h1,
+.content-box p,
+.content-box th,
+.content-box td {
+  color: #333;
+}
+
+.btn {
+  font-weight: bold;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  transition: transform .2s;
+}
+
+.table thead th {
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(255,69,0,0.1);
+}
+
+.nav-pills .nav-link {
+  color: #ffffff; /* Change text color */
+  background-color: #1a1a1a; /* Background color for unselected links */
+  border-radius: 5px; /* Rounded corners */
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #ff4500; /* Background color on hover */
+  color: #ffffff; /* Text color on hover */
+}
+
+.nav-pills .nav-link.active {
+  background-color: #ff4500; /* Background color for active link */
+  color: #ffffff; /* Text color for active link */
 }
