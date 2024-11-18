@@ -39,12 +39,6 @@ namespace Gymbokning.Controllers
                 .Where(gc => gc.StartTime < currentTime)
                 .OrderByDescending(gc => gc.StartTime)
                 .ToListAsync();
-            
-            ViewBag.CurrentTime = currentTime;
-            ViewBag.UserID = currentUser.Id;
-            ViewBag.TotalClasses = await _context.GymClasses.CountAsync();
-            ViewBag.UserClasses = await _context.GymClasses
-                .CountAsync(gc => gc.AttendingMembers.Any(am => am.ApplicationUserId == currentUser.Id));
 
             return View(pastClasses);
         }
